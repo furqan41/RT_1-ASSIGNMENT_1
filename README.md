@@ -289,3 +289,8 @@ for m in markers:
 ```
 
 [sr-api]: https://studentrobotics.org/docs/programming/sr/
+
+
+**_FLOW CHAT OF THE SYSTEM_**
+
+![](https://github.com/furqan41/RT_1-ASSIGNMENT_1/blob/main/IMAGES/flow%20chat.png)
