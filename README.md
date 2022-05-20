@@ -5,7 +5,8 @@ This is a simple, portable robot simulator developed by [Student Robotics](https
 Some of the arenas and the exercises have been modified for the Research Track I course
 
 The project aims to make a holonomic robot move inside a maze without hitting walls made of golden boxes. Furthermore, inside the maze, there are many silver tokens that the robot have to grab, move them behind him and then start again with the search for the next tokens.
-![](IMAGES/capture.PNG)
+
+![](https://raw.githubusercontent.com/furqan41/RT_1-ASSIGNMENT_1/main/IMAGES/Capture.PNG)
 
 
 
