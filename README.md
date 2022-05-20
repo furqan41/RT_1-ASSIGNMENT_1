@@ -41,15 +41,143 @@ The API for controlling a simulated robot is designed to be as similar as possib
 
 ### Motors ###
 
-The simulated robot has two motors configured for skid steering, connected to a two-output [Motor Board](https://studentrobotics.org/docs/kit/motor_board). The left motor is connected to output `0` and the right motor to output `1`.
+The simulated robot has two motors configured for skid steering, connected to a two-output [Motor Board](https://studentrobotics.org/docs/kit/motor_board). 
+The left motor is connected to output `0` and the right motor to output `1`.
 
-The Motor Board API is identical to [that of the SR API](https://studentrobotics.org/docs/programming/sr/motors/), except that motor boards cannot be addressed by serial number. So, to turn on the spot at one quarter of full power, one might write the following:
+The Motor Board API is identical to [that of the SR API](https://studentrobotics.org/docs/programming/sr/motors/), except that motor boards cannot be addressed by serial number.
+So, to turn on the spot at one quarter of full power, one might write the following:
+
 
 ```python
 R.motors[0].m0.power = 25
 R.motors[0].m1.power = -25
 ```
 
+**_TO DRIVE THE ROBOT FORWARD_**
+
+def drive(speed , seconds):
+
+	
+	'''
+	Function that gives the robot the ability of move straight for a certain time with a defined speed 
+	
+	Arguments:
+	
+		speed = speed of the motors, that will be equal on each motor to move straight
+		
+		seconds = time interval in which the robot will move straight 
+		
+	This function has no returns
+		
+	'''
+
+	R.motors[0].m0.power = speed
+	R.motors[0].m1.power = speed 
+	time.sleep(seconds) 
+	R.motors[0].m0.power = 0
+	R.motors[0].m1.power = 0
+ 
+ here the both moter have same speed in the same direction that makes the robot move forward 
+ 
+ **_TO TURN THE ROBOT _**
+ 
+ def turn(speed , seconds):
+
+	'''
+	Function that gives the robot the ability to turn on its axis 
+	
+	Arguments:
+	
+		speed = speed of the motors, which will be positive on one and negative on the other in order to create the rotation
+		
+		seconds = time interval in which the robot will rotate 
+	
+	This function has no returns 
+	
+	'''
+
+	R.motors[0].m0.power = speed 
+	R.motors[0].m1.power = -speed 
+	time.sleep(seconds)
+	R.motors[0].m0.power =0
+	R.motors[0].m1.power =0
+ 
+ here the one MOTOR will have positive speed and the other motor will have (-speed) that makes the robot to rotate 
+
+****WHEN THE ROBOT FIND THE SILVER TOCKEN**
+(WHICH MEANS THE REQUIRED THRESHOLD HAS BEEN ACHIVED AND THE ROBOT ALLIGNED WITH THE SILVER TOCKEN)
+
+(WHICH MEANS THE REQUIRED THRESHOLD HAS BEEN ACHIVED THAN THE ROBOT ALLIGNS ITSELF WITH THE POSITION AND ANGEL OF THE SILVER TOCKEN)
+
+def Routine():
+
+	'''
+	Function that activates the Routine ( Grab , turn , release , turn ) if and only if the robot is close enough to the silver token (distance threshold: 0.4)
+	if the the robot is far from the silver token it will drive.
+	
+	This function has no return
+	
+	'''
+
+	d_th = 0.4
+	
+	dist , rot_y = find_silver_token()
+	
+	if dist > d_th or dist == -1:
+	
+		drive(75,0.1)
+
+
+else:          # and then robot grib the silver box put it behind and then robot return to its privious position  
+	
+		R.grab()
+		print("Gotta catch'em all!")
+		turn(20,3)
+		R.release()
+		drive(-20,0.9)
+		turn(-20,3)
+  
+  **_IF THE SILVER BOX IS MISALLIGNED_ **
+
+(WHICH MEANS THE REQUIRED THRESHOLD HAS BEEN ACHIVED THAN THE ROBOT NEEDS TO  ALLIGNS ITSELF WITH THE POSITION AND ANGEL OF THE SILVER TOCKEN[IF IT IS NOT ALLIGNED])
+
+
+def Silver_Approach(dist, rot_y):
+
+	'''
+	This Function approach the silver token when the robot detect one. At first The robot will verify if it is in the right direction of the silver token and, if it's not, it will adjust itself turning right and left. Secondly it will call the function Routine().
+	
+	Arguments:
+	
+		dist = the distance of the silver token that the robot has detected 
+		
+		rot_y = the angle of the silver token that the robot has detected 
+	
+	This function has no returns
+	
+	'''
+	
+	a_th = 2
+	
+	while rot_y < -a_th or rot_y > a_th :
+	
+		if rot_y < -a_th:
+		
+			turn(-2,0.5)
+			
+			print("left a bit!!")
+			
+		if rot_y > a_th:
+		
+			turn(2,0.5)
+			
+			print("right a bit!!")
+			
+		dist , rot_y = find_silver_token()
+		
+	Routine()
+ 
+ 
 ### The Grabber ###
 
 The robot is equipped with a grabber, capable of picking up a token which is in front of the robot and within 0.4 metres of the robot's centre. To pick up a token, call the `R.grab` method:
@@ -63,6 +191,70 @@ The `R.grab` function returns `True` if a token was successfully picked up, or `
 To drop the token, call the `R.release` method.
 
 Cable-tie flails are not implemented.
+
+A function has been created to clean the main function of the code from the routine that the robot does when it has to grab a silver token.
+
+Routine() : When the robot is close enough to a silver token (in particular at a distance of 0.4), thanks to this function, it will grab the token (method: R.grab ()), it will turn 180 ° ( function: turn ()), will release the token (method: R.release ()), go back for a while (function: drive ()) and finally turn 180 ° again to continue the ride in the maze.
+
+This function has no Returns .
+
+    R.grab()
+    print("Gotcha!!")
+    turn(20,3)
+    R.release()
+    drive(-20,0.9)
+    turn(-20,3)
+    
+   **_WHEN ROBOT COME CLOSER TO THE WALL(GOLED BOXES)_**
+  The rotation function will be called out and this function will make the decision weather the robot should move left of right without touch the golden boxes 
+  
+   When the robot is close to the wall it calculates (using the R.see() method) the distance between it and the nearest golden box, respectively, to its right and left
+  
+  def Rotation():   # When the robot is close to the wall it calculates (using the R.see() method) the distance between it and the nearest golden box, respectively,                         to its right and left
+
+	'''
+	Function to calculate the distance between the robot and the nearest golden box, respectively, to its right and left, each at an angle of 30 degrees (between 75 and 105 degrees for its right and between -105 and -75 degrees for its left).
+	
+	The robot will rotate towards the furthest golden box until it no longer sees any golden box in cone of 91 degrees at a distance of 1 in front of it. 
+	
+	The angle and the distance of the cone are settable by passing the arguments to the function find_golden_token(..,..).
+	
+	Thanks to this feature the robot will always turn counter-clockwise.
+	
+	
+	This function has no returns 
+	
+	'''
+
+	loc = {'right_distance':7, 'left_distance':7}																																																																																																																																																																																																		
+	
+	for token in R.see():
+	
+		if 75 < token.rot_y < 105:
+		
+			if token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < loc['right_distance']:
+				
+				loc['right_distance'] = token.dist
+				
+		if -105 < token.rot_y < -75:
+		
+			if token.info.marker_type is MARKER_TOKEN_GOLD and token.dist < loc['left_distance']:
+			
+				loc['left_distance'] = token.dist 
+				
+	if loc ['right_distance'] > loc['left_distance']:
+	
+		while find_golden_token(1,45.5):
+		
+			turn(10,0.1)
+			
+		
+			
+	else:
+	
+		while find_golden_token(1,45.5):
+			
+			turn(-10,0.1) 
 
 ### Vision ###
 
