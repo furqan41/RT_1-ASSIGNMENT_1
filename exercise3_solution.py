@@ -79,7 +79,7 @@ def find_golden_token(defult_dist=0.9, rot=45):
 	
 	Arguments:
 	
-		distance = the settable distance of the cone in which the robot can detect golden boxes (by deafault 0.8)
+		distance = the settable distance of the cone in which the robot can detect golden boxes (by deafault 0.9)
 		
 		angle = the settable angle of the cone in which the robot can detect golden boxes (by default 45)
 		
@@ -345,9 +345,5 @@ def main():
 	
 
 
-#########################################
 
-#class Rotation:
- #   def __init__(self,      somevar):
-  #      #Anything you put inhere would be run when you call Rotation()
 main()
