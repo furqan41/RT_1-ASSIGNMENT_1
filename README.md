@@ -128,7 +128,8 @@ def Routine():
 		drive(75,0.1)
 
 
-else:          # and then robot grib the silver box put it behind and then robot return to its privious position  
+
+ # and then robot grib the silver box put it behind and then robot return to its privious position  
 	
 		R.grab()
 		print("Gotta catch'em all!")
