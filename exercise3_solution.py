@@ -71,7 +71,7 @@ def turn(speed , seconds):
 	
 #########################################
 
-def find_golden_token(defult_dist=0.8, rot=50):
+def find_golden_token(defult_dist=0.9, rot=45):
 
 	'''
 	Function to detect the closest golden box to the robot in a cone which by default is 90 degrees (between -45 and 45 degrees) in a maximum distance of 0.9.
